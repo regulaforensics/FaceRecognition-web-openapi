@@ -4,5 +4,10 @@ info:
   description: Regula Face Recognition Web API
   version: 0.1.0
 paths:
+  /groups:
+    $ref: "./group.yml#/paths/~1groups"
+  /groups/{group_id}:
+    $ref: "./group.yml#/paths/~1groups~1{group_id}"
+
   /compare:
     $ref: './comparison.yml#/paths/~1compare'

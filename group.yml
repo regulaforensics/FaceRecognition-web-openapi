@@ -1,0 +1,120 @@
+openapi: 3.0.3
+
+paths:
+  /groups:
+    post:
+      tags:
+        - group
+      summary: "Create group"
+      operationId: create_group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupToCreate"
+      response:
+        200:
+          description: "Successful operation. Return group."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        400:
+          $ref: "./common.yml#/components/responses/BadRequest"
+    get:
+      tags:
+        - group
+      summary: "Get groups"
+      operationId: get_all_groups
+      parameters:
+        - $ref: "./common.yml#/components/parameters/page"
+        - $ref: "./common.yml#/components/parameters/size"
+        - $ref: "./common.yml#/components/parameters/name"
+      responses:
+        200:
+          description: "Successful operation. Return all groups on the current page."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GroupPage"
+        400:
+          $ref: "./common.yml#/components/responses/BadRequest"
+  /groups/{group_id}:
+    parameters:
+      - $ref: "./common.yml#/components/parameters/group_id"
+    put:
+      tags:
+        - group
+      summary: "Update group"
+      operationId: update_group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupPatch"
+      responses:
+        204:
+          $ref: "./common.yml#/components/responses/SuccessEmpty"
+        400:
+          $ref: "./common.yml#/components/responses/BadRequest"
+    get:
+      tags:
+        - group
+      summary: "Get group"
+      operationId: get_group
+      responses:
+        200:
+          description: "Successful operation. Return group."
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        400:
+          $ref: "./common.yml#/components/responses/BadRequest"
+        404:
+          $ref: "./common.yml#/components/responses/NotFound"
+
+
+components:
+  schemas:
+    Group:
+      allOf:
+        - $ref: "#/components/schemas/GroupFields"
+
+    GroupPage:
+      allOf:
+        - $ref: "./common.yml#/components/schemas/PageFields"
+        - type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/Group"
+
+
+    GroupToCreate:
+      allOf:
+        - $ref: "#/components/schemas/GroupToCreateFields"
+
+    GroupPatch:
+      allOf:
+        - $ref: "#/components/schemas/GroupToCreateFields"
+
+    GroupFields:
+      allOf:
+        - type: object
+          properties:
+            id:
+              $ref: "./common.yml#/components/schemas/Id"
+        - $ref: "#/components/schemas/GroupToCreateFields"
+
+
+    GroupToCreateFields:
+      type: object
+      properties:
+        name:
+          type: string
+        metadata:
+          type: object

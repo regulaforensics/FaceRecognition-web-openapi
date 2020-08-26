@@ -2,7 +2,35 @@ openapi: 3.0.3
 
 components:
 
+  parameters:
+    page:
+      name: page
+      in: query
+      required: true
+      schema:
+        type: integer
+    size:
+      name: size
+      in: query
+      required: true
+      schema:
+        type: integer
+    name:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+    group_id:
+      name: group_id
+      in: path
+      required: true
+      schema:
+        type: integer
+
   responses:
+    SuccessEmpty:
+      description: "Successful operation. Return nothing."
     BadLicense:
       description: "Bad license. Either server or request does not contain valid license."
     BadRequest:
@@ -11,9 +39,16 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/OperationLog"
-
+    NotFound:
+      description: "Item not found."
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/OperationLog"
 
   schemas:
+    Id:
+      type: integer
 
     ImageData:
       description: "Base64 encoded image"
@@ -31,3 +66,11 @@ components:
           type: string
         payload:
           type: object
+
+    PageFields:
+      type: object
+      properties:
+        page:
+          type: integer
+        total_pages:
+          type: integer
